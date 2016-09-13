@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--Load the Ajax API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+  <title>Chart.js </title>
+  <script type="text/javascript">
+
+   // Load the Visualization API and the piechart package.
+   google.load('visualization', '1', {'packages':['line','bar','corechart']});
+
+   // Set a callback to run when the Google Visualization API is loaded.
+   google.setOnLoadCallback(drawChart);
+
+   function drawChart() {
+
+     // Create our data table out of JSON data loaded from server.
+     var data = new google.visualization.DataTable();
+     data.addColumn('string', 'Flowers');
+        data.addColumn('number', 'Count');
+        data.addRows([
+               // Instead of plugging in the values manually, or reading them
+               // from a Data Source like Google Spreadsheets, feed them in
+               // using Jinja, the templating system Flask uses.
+               // Each iteration evaluates to something like this:
+               // ['Saturday', 28],
+               {%- for flower, num in data %}
+               ['{{ flower }}', {{ num }}],
+               {%- endfor %}
+       ]);
+
+
+     var options1 = {
+          title: 'Line Chart',
+         is3D: 'true',
+         width: 500,
+         height: 300
+       };
+       var options2 = {
+            title: 'Bar Chart',
+           is3D: 'true',
+           width: 500,
+           height: 300
+         };
+
+     // Instantiate and draw our chart, passing in some options.
+     // Do not forget to check your div ID
+     var chart1 = new google.visualization.LineChart(document.getElementById('chart_div1'));
+     chart1.draw(data, options1);
+     var chart2 = new google.visualization.BarChart(document.getElementById('chart_div2'));
+     chart2.draw(data, options2);
+   }
+   </script>
+
+   </head>
+   <body>
+<h1>Flask Chart</h1>
+<!-- bar chart canvas element -->
+<div class="rowone">
+      <div class="col-xs-6">
+    <div id="chart_div1"></div></div>
+    <div class="col-xs-6">
+    <div id="chart_div2"></div>
+  </div>
+
+</body></html>
